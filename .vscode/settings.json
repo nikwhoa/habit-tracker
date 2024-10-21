@@ -1,6 +1,0 @@
-{
-  "files.exclude": {
-    "client/node_modules": true,
-    "server/node_modules": true
-  }
-}
