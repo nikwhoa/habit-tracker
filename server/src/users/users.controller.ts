@@ -1,5 +1,6 @@
-import { Body, Controller, Post } from '@nestjs/common';
+import { Body, Controller, Get, Post, UseGuards } from '@nestjs/common';
 import { UsersService } from './users.service';
+import { AuthGuard } from 'src/auth/auth.guard';
 
 @Controller('users')
 export class UsersController {
@@ -13,5 +14,11 @@ export class UsersController {
   ) {
     //   throw new HttpException('Forbidden', HttpStatus.FORBIDDEN);
     return this.userService.createUser(email, name, password);
+  }
+
+  @UseGuards(AuthGuard)
+  @Get()
+  async findAll() {
+    return this.userService.findAll();
   }
 }
