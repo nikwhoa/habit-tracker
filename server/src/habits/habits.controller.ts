@@ -1,5 +1,13 @@
-import { Body, Controller, Get, Post } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  Post,
+  UseGuards,
+  Request,
+} from '@nestjs/common';
 import { HabitsService } from './habits.service';
+import { AuthGuard } from 'src/auth/auth.guard';
 
 @Controller('habits')
 export class HabitsController {
@@ -10,8 +18,9 @@ export class HabitsController {
     return this.habitsService.getHabits();
   }
 
-  @Post('create-habit')
-  createHabit(@Body('title') title: string) {
-    return this.habitsService.createHabit(title);
+  @Post()
+  @UseGuards(AuthGuard)
+  createHabit(@Body('title') title: string, @Request() req) {
+    return this.habitsService.createHabit(title, req.user.sub);
   }
 }

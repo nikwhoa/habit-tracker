@@ -22,14 +22,25 @@ model User {
 }
 
 model Habit {
-  id          Int        @id @default(autoincrement())
-  title       String
-  createdAt   DateTime   @default(now())
-  completedAt DateTime[]
-  spheres     Spheres[]  @relation("HabitSpheres")
-  status      Status     @default(active)
-  User        User?      @relation(fields: [userId], references: [id])
-  userId      Int?
+  id              Int               @id @default(autoincrement())
+  title           String
+  createdAt       DateTime          @default(now()) 
+  spheres         Spheres[]         @relation("HabitSpheres")
+  status          Status            @default(active)
+  user            User?             @relation(fields: [userId], references: [id])
+  userId          Int?
+  habitCompletions HabitCompletion[]
+}
+
+model HabitCompletion {
+  id          Int      @id @default(autoincrement())
+  habit       Habit    @relation(fields: [habitId], references: [id])
+  habitId     Int
+  completedAt DateTime
+  notes       String? // Add notes about this particular completion
+  mood        Int? // Track mood when completing habit
+  difficulty  Int? // Track how difficult it was
+  duration    Int? // Track how long it took
 }
 
 model Spheres {
@@ -44,4 +55,10 @@ enum Status {
   archived
   deleted
   completed
+}
+
+enum FrequencyType {
+  DAILY
+  WEEKLY
+  MONTHLY
 }
