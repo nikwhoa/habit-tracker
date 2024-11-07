@@ -25,12 +25,17 @@ export class HabitsService {
     });
   }
 
-  async getHabits() {
-    return this.prisma.habit.findMany();
+  async getHabits(userId: number) {
+    return this.prisma.habit.findMany({
+      where: {
+        userId,
+      },
+    });
   }
 
   async updateHabit(
     id: number,
+    userId: number,
     data: {
       title?: string;
       description?: string;
@@ -39,15 +44,19 @@ export class HabitsService {
     },
   ) {
     return this.prisma.habit.update({
-      where: { id },
+      where: { id, userId },
       data,
     });
   }
 
-  async deleteHabit(id: number) {
-    return this.prisma.habit.delete({
-      where: { id },
+  async deleteHabit(id: number, userId: number) {
+    await this.prisma.habit.delete({
+      where: { id, userId },
     });
+
+    return {
+      message: 'Habit deleted successfully',
+    };
   }
 
   async trackHabitCompletion(habitId: number, date: Date) {

@@ -25,6 +25,8 @@ model Habit {
   id              Int               @id @default(autoincrement())
   title           String
   createdAt       DateTime          @default(now()) 
+  updatedAt       DateTime?          @updatedAt
+  frequency       FrequencyType?
   spheres         Spheres[]         @relation("HabitSpheres")
   status          Status            @default(active)
   user            User?             @relation(fields: [userId], references: [id])
