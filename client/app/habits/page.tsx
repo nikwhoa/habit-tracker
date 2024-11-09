@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useHabits } from "@/hooks/useHabits";
 import HabitItem from "@/components/habits/HabitItem";
 import CreateHabitForm from "@/components/habits/CreateHabitForm";
@@ -10,6 +10,7 @@ import { useAuth } from "@/contexts/auth";
 export default function HabitsPage() {
   const { habits, isLoading, error, fetchHabits, createHabit } = useHabits();
   const { isLoading: authIsLoading } = useAuth();
+  const [showCreateHabitForm, setShowCreateHabitForm] = useState(false);
 
   useEffect(() => {
     if (!authIsLoading) {
@@ -30,9 +31,17 @@ export default function HabitsPage() {
           My Habits
         </h1>
 
-        <div className="mb-8">
-          <CreateHabitForm onCreateHabit={createHabit} />{" "}
-          {/* Pass createHabit as prop */}
+        <div className="mb-8 flex justify-center">
+          {showCreateHabitForm ? (
+            <CreateHabitForm onCreateHabit={createHabit} />
+          ) : (
+            <button
+              onClick={() => setShowCreateHabitForm(true)}
+              className="w-6/12 py-2 bg-blue-500 text-white font-semibold rounded-lg hover:bg-blue-600 transition-colors"
+            >
+              Add Habit
+            </button>
+          )}
         </div>
 
         <div className="space-y-4">

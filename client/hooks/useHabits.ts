@@ -5,6 +5,7 @@ interface Habit {
   id: number;
   title: string;
   status: string;
+  description: string;
 }
 
 export function useHabits() {
@@ -34,7 +35,7 @@ export function useHabits() {
     }
   }, [fetchWithAuth]);
 
-  const createHabit = async (title: string) => {
+  const createHabit = async (title: string, description: string) => {
     try {
       const response = await fetchWithAuth(
         `${process.env.NEXT_PUBLIC_API_URL}/habits`,
@@ -43,7 +44,7 @@ export function useHabits() {
           headers: {
             "Content-Type": "application/json",
           },
-          body: JSON.stringify({ title }),
+          body: JSON.stringify({ title, description }),
         }
       );
       if (response.ok) {
@@ -52,8 +53,23 @@ export function useHabits() {
         return true;
       }
       return false;
-    } catch (err) {
+    } catch (error) {
       setError("Failed to create habit");
+      console.error(error);
+      return false;
+    }
+  };
+
+  const deleteHabit = async (id: number) => {
+    try {
+      await fetchWithAuth(`${process.env.NEXT_PUBLIC_API_URL}/habits/${id}`, {
+        method: "DELETE",
+      });
+      setHabits((prevHabits) => prevHabits.filter((habit) => habit.id !== id));
+      return true;
+    } catch (error) {
+      setError("Failed to delete habit");
+      console.error(error);
       return false;
     }
   };
@@ -64,5 +80,6 @@ export function useHabits() {
     error,
     fetchHabits,
     createHabit,
+    deleteHabit,
   };
 }

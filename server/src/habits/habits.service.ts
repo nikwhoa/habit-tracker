@@ -11,7 +11,7 @@ function isConsecutiveDay(date1: Date, date2: Date): boolean {
 export class HabitsService {
   constructor(private prisma: PrismaService) {}
 
-  async createHabit(title: string, userId: number) {
+  async createHabit(title: string, description: string, userId: number) {
     if (!title) {
       return {
         message: 'Title is required',
@@ -20,6 +20,7 @@ export class HabitsService {
     return this.prisma.habit.create({
       data: {
         title,
+        description,
         userId,
       },
     });

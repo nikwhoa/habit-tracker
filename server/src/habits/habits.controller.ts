@@ -24,8 +24,12 @@ export class HabitsController {
 
   @Post()
   @UseGuards(AuthGuard)
-  createHabit(@Body('title') title: string, @Request() req) {
-    return this.habitsService.createHabit(title, req.user.sub);
+  createHabit(
+    @Body('title') title: string,
+    @Body('description') description: string,
+    @Request() req,
+  ) {
+    return this.habitsService.createHabit(title, description, req.user.sub);
   }
 
   @Patch(':id')
